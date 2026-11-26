@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Urban Air Quality Assistant</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<a class="skip" href="#form">Skip to the form</a>
+<header>
+  <h1>Clear the air at home</h1>
+  <p>Tell us what the air is like today and how your household lives. You get a plan for the day, and what each step changes in the air you breathe.</p>
+</header>
+<main>
+  <noscript><p class="error">This assistant needs JavaScript to build your plan.</p></noscript>
+  <form id="form" novalidate>
+    <fieldset>
+      <legend>Today's air</legend>
+      <p class="hint">Look up your town for a live reading, or type the number from your air-quality app.</p>
+      <label for="city">Town or city</label>
+      <div class="inline">
+        <input id="city" type="text" maxlength="80" autocomplete="address-level2">
+        <button type="button" id="lookup">Look up</button>
+      </div>
+      <p id="lookup-status" class="hint" role="status"></p>
+      <label for="value">Air reading</label>
+      <div class="inline">
+        <input id="value" type="number" min="0" max="1000" step="any" inputmode="decimal" required>
+        <select id="unit" aria-label="Unit of the air reading">
+          <option value="pm25">PM2.5, µg/m³</option>
+          <option value="aqi">US AQI</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Who lives with you</legend>
+      <label class="check"><input type="checkbox" name="children"> Children under 12</label>
+      <label class="check"><input type="checkbox" name="elderly"> Adults over 65</label>
+      <label class="check"><input type="checkbox" name="pregnancy"> Someone who is pregnant</label>
+      <label class="check"><input type="checkbox" name="heart_lung"> Asthma, COPD or heart disease</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>How you live</legend>
+      <label for="commute">Daily travel</label>
+      <select id="commute" name="commute">
+        <option value="none">Mostly at home</option>
+        <option value="walk_cycle">Walk or cycle</option>
+        <option value="two_wheeler">Motorbike or scooter</option>
+        <option value="car">Car</option>
+        <option value="public_transport">Bus, metro or train</option>
+      </select>
+      <label for="cooking">Cooking fuel</label>
+      <select id="cooking" name="cooking">
+        <option value="lpg_png">LPG or piped gas</option>
+        <option value="electric">Induction or electric</option>
+        <option value="biomass">Wood, dung or coal</option>
+      </select>
+      <label for="heating">Winter heating</label>
+      <select id="heating" name="heating">
+        <option value="none">No heating</option>
+        <option value="electric">Electric heater</option>
+        <option value="biomass_coal">Wood, coal or open fire</option>
+      </select>
+      <label for="outdoor_hours">Hours outdoors on a typical day</label>
+      <input id="outdoor_hours" name="outdoor_hours" type="number" min="0" max="16" step="0.5" value="2">
+      <label class="check"><input type="checkbox" name="has_purifier"> We own an air purifier</label>
+      <label for="language">Language for AI explanations</label>
+      <select id="language" name="language">
+        <option value="en" lang="en">English</option>
+        <option value="hi" lang="hi">हिन्दी</option>
+        <option value="bn" lang="bn">বাংলা</option>
+        <option value="ta" lang="ta">தமிழ்</option>
+        <option value="te" lang="te">తెలుగు</option>
+        <option value="mr" lang="mr">मराठी</option>
+        <option value="ur" lang="ur">اردو</option>
+        <option value="es" lang="es">Español</option>
+        <option value="zh" lang="zh">中文</option>
+      </select>
+    </fieldset>
+
+    <button type="submit" id="submit">Make my plan</button>
+    <p id="error" class="error" role="alert"></p>
+  </form>
+  <section id="results" aria-label="Your plan"></section>
+</main>
+<footer>
+  <p>Estimates are illustrative and not medical advice. Nothing you enter is stored. Pressing Look up sends the town name to Open-Meteo. If AI is enabled, the plan (not your town) is sent to the Claude API to write the explanation.</p>
+</footer>
+<script src="/app.js" defer></script>
+</body>
+</html>
