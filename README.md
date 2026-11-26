@@ -1,4 +1,4 @@
-# 🌬️ Urban Air Quality Assistant
+#  Urban Air Quality Assistant
 
 > A GenAI-powered assistant that helps families and communities navigate severe winter smog. Enter today's air reading (or look up a town), describe your household, and receive a data-driven daily plan of low-emission routines, indoor air hacks, and sustainable swaps — each with a plain-language explanation and an estimated percentage reduction in PM2.5 exposure.
 
@@ -9,7 +9,7 @@
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 - [What It Does](#-what-it-does)
 - [Architecture Overview](#-architecture-overview)
@@ -31,7 +31,7 @@
 
 ---
 
-## 🎯 What It Does
+##  What It Does
 
 | Need | Where It Lives |
 |---|---|
@@ -44,34 +44,34 @@
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 The application follows a clean **three-tier architecture**: a static browser frontend communicates with a lightweight Python HTTP server, which orchestrates a deterministic rules engine and an optional GenAI layer.
 
 ```mermaid
 flowchart TD
-    subgraph Client["🖥️ Browser (static/)"]
+    subgraph Client[" Browser (static/)"]
         UI["index.html + style.css"]
         JS["app.js"]
     end
 
-    subgraph Server["⚙️ Python Server (server.py)"]
+    subgraph Server[" Python Server (server.py)"]
         RL["RateLimiter"]
         Router["Request Router"]
         Val["Input Validator"]
     end
 
-    subgraph Engine["🧮 Rules Engine"]
+    subgraph Engine[" Rules Engine"]
         AQI["aqi.py\nPM2.5 ↔ AQI Conversion\nHealth Band Classification"]
         ADV["advisor.py\nProfile Validation\nExposure Model\nAction Ranking"]
     end
 
-    subgraph AI["🤖 GenAI Layer (llm.py)"]
+    subgraph AI[" GenAI Layer (llm.py)"]
         Claude["Claude API\n(Anthropic)"]
         Offline["Offline Fallback\n(Deterministic Text)"]
     end
 
-    subgraph External["🌐 External APIs"]
+    subgraph External[" External APIs"]
         OM["Open-Meteo\nGeocoding + Air Quality"]
     end
 
@@ -94,7 +94,7 @@ flowchart TD
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 urban-air-assistant/
@@ -126,7 +126,7 @@ urban-air-assistant/
 
 ---
 
-## 🔄 Data Flow
+##  Data Flow
 
 ### Plan Generation Flow
 
@@ -185,7 +185,7 @@ sequenceDiagram
 
 ---
 
-## 📊 Exposure Model
+##  Exposure Model
 
 The advisor module uses a **24-hour time-weighted exposure model** to quantify each recommendation's impact. All constants are shown transparently to the user.
 
@@ -239,7 +239,7 @@ $$\text{TWA} = \text{PM2.5} \times \frac{(\text{outdoor\_hours} \times \text{out
 
 ---
 
-## 🔌 API Reference
+## API Reference
 
 | Endpoint | Method | Body / Query | Response |
 |---|---|---|---|
@@ -265,7 +265,7 @@ $$\text{TWA} = \text{PM2.5} \times \frac{(\text{outdoor\_hours} \times \text{out
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -292,7 +292,7 @@ python -m unittest discover -s tests -v
 
 ---
 
-## ☁️ Deployment on Render
+## Deployment on Render
 
 The repository includes a [`render.yaml`](render.yaml) Blueprint for one-click deployment.
 
@@ -302,7 +302,7 @@ flowchart LR
     B --> C["Build\npip install -r\nrequirements.txt"]
     C --> D["Start\npython -m airassist"]
     D --> E["Health check\nGET /healthz"]
-    E --> F["✅ Live on\nyour-app.onrender.com"]
+    E --> F["Live on\nyour-app.onrender.com"]
 
     style A fill:#e3f2fd,stroke:#1565c0,color:#000
     style F fill:#c8e6c9,stroke:#2e7d32,color:#000
@@ -320,7 +320,7 @@ flowchart LR
 
 ---
 
-## ✅ Quality Criteria
+##  Quality Criteria
 
 ### 1. Problem Statement Alignment _(High Impact)_
 
@@ -328,13 +328,13 @@ This application directly addresses the core challenge of helping families and c
 
 ```mermaid
 flowchart TD
-    PS["🎯 Problem: Families need<br/>actionable smog guidance"]
+    PS[" Problem: Families need<br/>actionable smog guidance"]
 
-    PS --> L["📍 Location-aware"]
-    PS --> P["👨‍👩‍👧‍👦 Lifestyle-tailored"]
-    PS --> A["🏠 Actionable daily plans"]
-    PS --> I["📊 Quantified impact"]
-    PS --> M["🌍 Multilingual"]
+    PS --> L[" Location-aware"]
+    PS --> P["Lifestyle-tailored"]
+    PS --> A[" Actionable daily plans"]
+    PS --> I[" Quantified impact"]
+    PS --> M["Multilingual"]
 
     L --> L1["Live PM2.5 lookup\n(Open-Meteo, no key)"]
     L --> L2["Manual PM2.5 or\nUS AQI input"]
@@ -374,7 +374,7 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    subgraph Principles["🏛️ Design Principles"]
+    subgraph Principles["Design Principles"]
         SP["Single-purpose\nmodules"]
         TH["Type hints\nthroughout"]
         FD["Frozen\ndataclasses"]
@@ -382,7 +382,7 @@ flowchart LR
         DT["Data-driven\nactions table"]
     end
 
-    subgraph Modules["📦 Module Responsibilities"]
+    subgraph Modules["Module Responsibilities"]
         AQI2["aqi.py\n69 lines"]
         ADV2["advisor.py\n301 lines"]
         LLM2["llm.py\n148 lines"]
@@ -412,14 +412,14 @@ flowchart LR
 ```mermaid
 flowchart TD
     REQ["Incoming Request"] --> RL["⏱️ Per-client Rate Limiter\n60 req/min, bounded memory"]
-    RL --> SZ["📏 Body Size Check\n≤ 4 KB, Content-Length required"]
-    SZ --> CT["📋 Content-Type Check\napplication/json only"]
-    CT --> VL["🔍 Strict Validation\nAllow-list fields,\ntype-check every value"]
-    VL --> PR["🧮 Process\n(server recomputes plan\nfrom raw inputs)"]
-    PR --> HD["🔒 Security Headers\nCSP, nosniff, no-referrer,\npermissions-policy"]
+    RL --> SZ[" Body Size Check\n≤ 4 KB, Content-Length required"]
+    SZ --> CT[" Content-Type Check\napplication/json only"]
+    CT --> VL[" Strict Validation\nAllow-list fields,\ntype-check every value"]
+    VL --> PR[" Process\n(server recomputes plan\nfrom raw inputs)"]
+    PR --> HD[" Security Headers\nCSP, nosniff, no-referrer,\npermissions-policy"]
     HD --> RES["Response"]
 
-    REQ --> SA["🗂️ Static Assets\n3 fixed files only\n(no path traversal)"]
+    REQ --> SA[" Static Assets\n3 fixed files only\n(no path traversal)"]
     SA --> HD
 
     style REQ fill:#ffcdd2,stroke:#c62828,color:#000
@@ -447,19 +447,19 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    subgraph Runtime["⚡ Runtime Efficiency"]
+    subgraph Runtime[" Runtime Efficiency"]
         O["O(n) per request\nn = number of actions"]
         SM["~800 lines total\nPython code"]
         ZD["Zero third-party\ndependencies"]
     end
 
-    subgraph Caching["💾 Caching & I/O"]
+    subgraph Caching[" Caching & I/O"]
         SF["Static files read\nonce at startup"]
         TC["TTL cache for\nlive lookups\n(15 min, max 128)"]
         NR["No per-request\ndisk I/O"]
     end
 
-    subgraph AI["🤖 AI Cost Control"]
+    subgraph AI[" AI Cost Control"]
         TA["Top 6 actions\nsent to model"]
         TK["500 token cap"]
         TO["12 s timeout"]
@@ -487,7 +487,7 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    TS["🧪 33 Tests\n(unittest, no network)"]
+    TS[" 33 Tests\n(unittest, no network)"]
 
     TS --> TE["test_engine.py\n20 tests"]
     TS --> TA["test_api.py\n10 tests"]
@@ -531,7 +531,7 @@ python -m pytest -q                           # same 33 tests
 
 ```mermaid
 flowchart TD
-    A11Y["♿ Accessibility"]
+    A11Y[" Accessibility"]
 
     A11Y --> SEM["Semantic HTML"]
     A11Y --> VIS["Visual Design"]
@@ -581,7 +581,7 @@ flowchart TD
 
 ---
 
-## ⚠️ Assumptions & Limitations
+##  Assumptions & Limitations
 
 | Assumption | Detail |
 |---|---|
@@ -593,6 +593,6 @@ flowchart TD
 
 ---
 
-## 📄 License
+##  License
 
 This project is provided as-is for educational and humanitarian purposes.

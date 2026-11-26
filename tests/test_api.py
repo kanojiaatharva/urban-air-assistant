@@ -43,6 +43,9 @@ class ApiTests(ServerCase):
         self.assertEqual(res.getheader("X-Content-Type-Options"), "nosniff")
         self.assertIn("default-src 'self'", res.getheader("Content-Security-Policy"))
         self.assertEqual(res.getheader("Server"), "AirAssist")
+        head_res, head_body = self.call("HEAD", "/")
+        self.assertEqual(head_res.status, 200)
+        self.assertEqual(head_body, b"")
 
     def test_serves_only_allowlisted_assets(self):
         for path, marker in (("/", b"<html"), ("/app.js", b"use strict"), ("/style.css", b"--page")):

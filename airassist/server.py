@@ -78,6 +78,9 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         self._dispatch(self._get)
 
+    def do_HEAD(self) -> None:
+        self._dispatch(self._get)  # _send suppresses the body when command == "HEAD"
+
     def do_POST(self) -> None:
         self._dispatch(self._post)
 
@@ -164,7 +167,8 @@ class Handler(BaseHTTPRequestHandler):
         for name, value in SECURITY_HEADERS.items():
             self.send_header(name, value)
         self.end_headers()
-        self.wfile.write(body)
+        if self.command != "HEAD":
+            self.wfile.write(body)
 
     def _json(self, payload: dict, status: int = 200) -> None:
         self._send(status, json.dumps(payload, ensure_ascii=False).encode(), "application/json; charset=utf-8")
@@ -190,7 +194,8 @@ def make_server(host: str = "127.0.0.1", port: int = 8000, *, assistant: Assista
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    host, port = os.environ.get("HOST", "127.0.0.1"), int(os.environ.get("PORT", "8000"))
+    default_host = "0.0.0.0" if ("PORT" in os.environ or "RENDER" in os.environ) else "127.0.0.1"
+    host, port = os.environ.get("HOST", default_host), int(os.environ.get("PORT", "8000"))
     httpd = make_server(host, port)
     log.info("Serving on http://%s:%d (AI %s)", host, port, "on" if httpd.assistant.enabled else "offline")
     try:
